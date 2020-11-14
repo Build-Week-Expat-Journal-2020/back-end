@@ -1,13 +1,12 @@
 const router = require("express").Router();
 const bcrypt = require("bcryptjs");
-const jwt = require("jsonwebtoken");
 const Users = require("./auth-model");
 const { validateRequest } = require("./auth-middleware");
 const generateToken = require("./generateToken");
 
 router.post("/register", validateRequest, async (req, res, next) => {
   const { username, password } = req.body;
-  const hash = await bcrypt.hash(password, process.env.BCRYPT_ROUNDS);
+  const hash = await bcrypt.hash(password, Number(process.env.BCRYPT_ROUNDS));
   try {
     const user = await Users.findByUsername(username);
     if (user) {
@@ -15,7 +14,7 @@ router.post("/register", validateRequest, async (req, res, next) => {
     }
     const newUser = await Users.add({ username, password: hash });
     const token = generateToken(newUser);
-    res.status(201).json({ user, token });
+    res.status(201).json({ id: newUser.id, username: newUser.username, token });
   } catch (err) {
     console.log(err);
     next(err);
@@ -38,8 +37,10 @@ router.post("/login", validateRequest, async (req, res, next) => {
     }
 
     const token = generateToken(user);
-    res.json({ user, token })
-  } catch(err) {
+    res.json({ id: user.id, username: user.username, token });
+  } catch (err) {
     next(err);
   }
 });
+
+module.exports = router;

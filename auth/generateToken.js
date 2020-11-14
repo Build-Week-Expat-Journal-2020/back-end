@@ -8,6 +8,6 @@ module.exports = user => {
   const options = {
     expiresIn: "1h",
   };
-  const secret = process.env.JWT_SECRECT;
-  jwt.sign(payload, secret, options);
+  const secret = (process.env.JWT_SECRET);
+  return jwt.sign(payload, secret, options);
 };
