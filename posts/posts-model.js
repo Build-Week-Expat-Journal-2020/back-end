@@ -4,15 +4,15 @@ function find() {
   return db("posts");
 }
 
-function findUser(user_id) {
-  return db('users').where({ id: user_id })
+function findUser(id) {
+  return db('users').where({ id }).first();
 }
 
 function findById(id) {
   return db("posts as p")
     .join("users as u", "p.user_id", "u.id")
     .select("p.*", "u.username as posted_by")
-    .where({ id })
+    .where({ 'p.id': id })
     .first();
 }
 

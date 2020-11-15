@@ -18,18 +18,18 @@ router.get("/:id", validatePostID, (req, res) => {
   res.json(req.post);
 });
 
-router.get("/:user_id", async (req, res, next) => {
-  const user_id = req.params.user_id;
+router.get("/users/:id", async (req, res, next) => {
+  const { id } = req.params;
   try {
-    const user = await Posts.findUser(user_id);
+    const user = await Posts.findUser(id);
     if (!user) {
       return res.status(404).json({ message: "no user found with given id" });
     }
 
-    const userPosts = await Posts.findAllByUser(user_id);
+    const userPosts = await Posts.findAllByUser(id);
     if (!userPosts.length) {
       return res
-        .status(204)
+        .status(404)
         .json({ message: "this user has not made any posts" });
     }
     res.json(userPosts);
