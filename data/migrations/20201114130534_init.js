@@ -11,6 +11,7 @@ exports.up = async function (knex) {
     tbl.text("story");
     tbl
       .integer("user_id")
+      .notNull()
       .references("id")
       .inTable("users")
       .onDelete("CASCADE")

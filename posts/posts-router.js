@@ -1,6 +1,6 @@
 const router = require("express").Router();
 const Posts = require("./posts-model");
-const { validatePostID } = require("./posts-middleware");
+const { validatePostID, validateRequest } = require("./posts-middleware");
 
 router.get("/", async (req, res, next) => {
   try {
@@ -33,6 +33,30 @@ router.get("/:user_id", async (req, res, next) => {
         .json({ message: "this user has not made any posts" });
     }
     res.json(userPosts);
+  } catch (err) {
+    next(err);
+  }
+});
+
+router.post("/", validateRequest, async (req, res, next) => {
+  const { user_id } = req.body;
+  try {
+    const user = await Posts.findUser(user_id);
+    if (!user) {
+      return res.status(400).json({ message: "invalid user ID for post" });
+    }
+    const post = await Posts.add(req.body);
+    res.status(201).json(post);
+  } catch (err) {
+    next(err);
+  }
+});
+
+router.put("/:id", validatePostID, validateRequest, async (req, res, next) => {
+  const { id } = req.params;
+  try {
+    const user = Posts.update(req.body, id);
+    res.json(user);
   } catch (err) {
     next(err);
   }

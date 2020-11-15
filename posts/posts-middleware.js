@@ -27,7 +27,23 @@ function restrict(req, res, next) {
   next();
 }
 
+function validateRequest(req, res, next) {
+  const { photo, user_id } = req.body;
+  if (!photo || typeof photo !== "string") {
+    return res
+      .status(400)
+      .json({ message: "please provide a photo for the post" });
+  }
+  if (!user_id || typeof user_id !== "number") {
+    return res
+      .status(400)
+      .json({ message: "please provide a user ID for the post" });
+  }
+  next();
+}
+
 module.exports = {
   validatePostID,
   restrict,
+  validateRequest
 };
