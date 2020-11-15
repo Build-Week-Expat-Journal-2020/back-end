@@ -20,6 +20,6 @@
 | Delete single `post`             | /posts/:id            | DELETE | delete message                 |
 
 ### Notes:
-[ ] Logged in users can only update and delete their own posts.
-[ ] Logged in users can only post under their own user_id.
-[ ] All `/posts` endpoints require authentication.
+- Logged in users can only update and delete their own posts.
+- Logged in users can only post under their own user_id.
+- All `/posts` endpoints require authentication.
