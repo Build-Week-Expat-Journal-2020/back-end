@@ -55,11 +55,21 @@ router.post("/", validateRequest, async (req, res, next) => {
 router.put("/:id", validatePostID, validateRequest, async (req, res, next) => {
   const { id } = req.params;
   try {
-    const user = Posts.update(req.body, id);
+    const user = await Posts.update(req.body, id);
     res.json(user);
   } catch (err) {
     next(err);
   }
 });
+
+router.delete('/:id', validatePostID, async (req, res, next) => {
+  const { id } = req.params;
+  try {
+    await Posts.remove(id);
+    res.json({ message: 'post was removed' })
+  } catch (err) {
+    next(err);
+  }
+})
 
 module.exports = router;

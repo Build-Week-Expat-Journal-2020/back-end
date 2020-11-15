@@ -1,18 +1,20 @@
 const db = require("../data/config");
 
 function find() {
-  return db("posts");
+  return db("posts as p")
+    .join("users as u", "p.user_id", "u.id")
+    .select("p.*", "u.username as posted_by");
 }
 
 function findUser(id) {
-  return db('users').where({ id }).first();
+  return db("users").where({ id }).first();
 }
 
 function findById(id) {
   return db("posts as p")
     .join("users as u", "p.user_id", "u.id")
     .select("p.*", "u.username as posted_by")
-    .where({ 'p.id': id })
+    .where({ "p.id": id })
     .first();
 }
 
@@ -34,7 +36,7 @@ async function update(changes, id) {
 }
 
 function remove(id) {
-  return db('posts').where({ id }).del();
+  return db("posts").where({ id }).del();
 }
 
 module.exports = {
@@ -45,4 +47,4 @@ module.exports = {
   add,
   update,
   remove,
-}
+};
