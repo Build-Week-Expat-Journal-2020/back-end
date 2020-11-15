@@ -23,6 +23,7 @@ function restrict(req, res, next) {
     if (err) {
       return res.status(401).json({ message: "invalid token" });
     }
+    req.token = decoded;
   });
   next();
 }
@@ -42,8 +43,23 @@ function validateRequest(req, res, next) {
   next();
 }
 
+async function validateUser(req, res, next) {
+  const { username } = req.token;
+  const { id } = req.params;
+  try {
+    const post = await Posts.findById(id);
+    if (post.posted_by !== username) {
+      res.status(400).json({ message: "cannot update other users' posts" });
+    }
+    next();
+  } catch (err) {
+    next(err);
+  }
+}
+
 module.exports = {
   validatePostID,
   restrict,
-  validateRequest
+  validateRequest,
+  validateUser,
 };

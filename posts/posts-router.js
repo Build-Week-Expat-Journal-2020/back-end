@@ -1,6 +1,6 @@
 const router = require("express").Router();
 const Posts = require("./posts-model");
-const { validatePostID, validateRequest } = require("./posts-middleware");
+const { validatePostID, validateRequest, validateUser } = require("./posts-middleware");
 
 router.get("/", async (req, res, next) => {
   try {
@@ -52,17 +52,17 @@ router.post("/", validateRequest, async (req, res, next) => {
   }
 });
 
-router.put("/:id", validatePostID, validateRequest, async (req, res, next) => {
+router.put("/:id", validatePostID, validateRequest, validateUser, async (req, res, next) => {
   const { id } = req.params;
   try {
-    const user = await Posts.update(req.body, id);
-    res.json(user);
+    const post = await Posts.update(req.body, id);
+    res.json(post);
   } catch (err) {
     next(err);
   }
 });
 
-router.delete('/:id', validatePostID, async (req, res, next) => {
+router.delete('/:id', validatePostID, validateUser, async (req, res, next) => {
   const { id } = req.params;
   try {
     await Posts.remove(id);
