@@ -5,6 +5,8 @@ const helmet = require("helmet");
 const cors = require('cors');
 
 const authRouter = require('../auth/auth-router');
+const postsRouter = require('../posts/posts-router');
+const { restrict } = require('../posts/posts-middleware')
 
 server.use(morgan("dev"));
 server.use(helmet());
@@ -12,6 +14,7 @@ server.use(express.json());
 server.use(cors());
 
 server.use('/auth', authRouter)
+server.use('/api/posts', restrict, postsRouter);
 
 server.get("/", (req, res) => {
   res.json({ api: "up" });
