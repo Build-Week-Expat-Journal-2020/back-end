@@ -26,7 +26,7 @@ function findAllByUser(user_id) {
 }
 
 async function add(data) {
-  const [id] = await db("posts").insert(data);
+  const [id] = await db("posts").insert(data).returning('id');
   return findById(id);
 }
 
