@@ -6,12 +6,17 @@ const generateToken = require("./generateToken");
 
 router.post("/register", validateRequest, async (req, res, next) => {
   const { username, password } = req.body;
+  console.log("9");
   const hash = await bcrypt.hash(password, Number(process.env.BCRYPT_ROUNDS));
+  console.log('11');
   try {
     const user = await Users.findByUsername(username);
+    console.log("14");
     if (user) {
+      console.log("16");
       return res.status(409).json({ message: "username already taken" });
     }
+    console.log("19");
     const newUser = await Users.add({ username, password: hash });
     console.log(newUser);
     const token = generateToken(newUser);
