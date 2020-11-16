@@ -3,6 +3,7 @@ const server = express();
 const morgan = require("morgan");
 const helmet = require("helmet");
 const cors = require("cors");
+require("dotenv").config();
 
 const authRouter = require("../auth/auth-router");
 const postsRouter = require("../posts/posts-router");
@@ -23,7 +24,7 @@ server.use("*", (req, res) => {
   res.status(404).json({ message: "not found" });
 });
 server.use((err, req, res, next) => {
-  res.status(500).json({ message: err.message });
+  res.status(500).json({ message: err.message, node_env: process.env.NODE_ENV });
 });
 
 module.exports = server;
