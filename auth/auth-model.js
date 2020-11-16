@@ -1,9 +1,7 @@
 const db = require("../data/config");
 
 async function add(user) {
-  console.log("user", user);
   const [id] = await db("users").insert(user).returning('id');
-  console.log("id:", id)
   return findByID(id);
 }
 
