@@ -13,6 +13,7 @@ router.post("/register", validateRequest, async (req, res, next) => {
       return res.status(409).json({ message: "username already taken" });
     }
     const newUser = await Users.add({ username, password: hash });
+    console.log(newUser);
     const token = generateToken(newUser);
     res.status(201).json({ id: newUser.id, username: newUser.username, token });
   } catch (err) {
