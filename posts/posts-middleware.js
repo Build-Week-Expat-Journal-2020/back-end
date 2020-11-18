@@ -49,7 +49,7 @@ async function validateUser(req, res, next) {
   try {
     const post = await Posts.findById(id);
     if (post.posted_by !== username) {
-      res.status(400).json({ message: "cannot update other users' posts" });
+      return res.status(400).json({ message: "cannot update other users' posts" });
     }
     next();
   } catch (err) {
